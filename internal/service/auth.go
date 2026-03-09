@@ -2,8 +2,10 @@ package service
 
 import (
 	"backend/internal/lib"
+	"backend/internal/models"
 	"backend/internal/repository"
 	"errors"
+	"time"
 
 	"github.com/matthewhartstonge/argon2"
 )
@@ -16,26 +18,26 @@ func NewAuthService(repo *repository.UserRepository) *AuthService {
 	return &AuthService{repo: repo}
 }
 
-func (s *AuthService) Register(email string, password string) error {
+func (s *AuthService) Register(req models.CreateUserRequest) error {
 
-	existingUser, _ := s.repo.GetByEmail(email)
+	existingUser, _ := s.repo.GetByEmail(req.Email)
 	if existingUser != nil {
 		return errors.New("email already registered")
 	}
 
 	argon := argon2.DefaultConfig()
 
-	hash, err := argon.HashEncoded([]byte(password))
+	hash, err := argon.HashEncoded([]byte(req.Password))
 	if err != nil {
 		return err
 	}
 
-	err = s.repo.CreateUser(email, string(hash))
-	if err != nil {
-		return err
-	}
+	req.Password = string(hash)
 
-	return nil
+	req.Created_at = time.Now()
+	req.Updated_at = time.Now()
+
+	return s.repo.CreateUser(req)
 }
 
 func (s *AuthService) Login(email string, password string) (string, error) {

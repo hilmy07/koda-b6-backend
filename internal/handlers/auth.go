@@ -3,6 +3,7 @@ package handlers
 import (
 	"net/http"
 
+	"backend/internal/models"
 	"backend/internal/service"
 
 	"github.com/gin-gonic/gin"
@@ -45,12 +46,12 @@ func (h *AuthHandler) AuthLogin(ctx *gin.Context) {
 
 func (h *AuthHandler) AuthRegister(ctx *gin.Context) {
 
-	type Request struct {
-		Email    string `json:"email"`
-		Password string `json:"password"`
-	}
+	// type Request struct {
+	// 	Email    string `json:"email"`
+	// 	Password string `json:"password"`
+	// }
 
-	req := Request{}
+	req := models.CreateUserRequest{}
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(400, gin.H{
@@ -59,7 +60,7 @@ func (h *AuthHandler) AuthRegister(ctx *gin.Context) {
 		return
 	}
 
-	err := h.service.Register(req.Email, req.Password)
+	err := h.service.Register(req)
 
 	if err != nil {
 		ctx.JSON(400, gin.H{
