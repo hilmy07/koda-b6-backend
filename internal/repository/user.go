@@ -32,6 +32,9 @@ func (r *UserRepository) GetByEmail(email string) (*models.User, error) {
 
 	user, err := pgx.CollectOneRow(rows, pgx.RowToStructByPos[models.User])
 	if err != nil {
+		if err == pgx.ErrNoRows {
+			return nil, nil
+		}
 		return nil, err
 	}
 
@@ -56,7 +59,7 @@ func (r *UserRepository) CreateUser(req models.CreateUserRequest) error {
 	return err
 }
 
-func (r *UserRepository) UpdateUserProfile(id int, req models.CreateUserRequest) error {
+func (r *UserRepository) UpdateUserProfile(req models.CreateUserRequest) error {
 
 	_, err := r.db.Exec(
 		context.Background(),
@@ -66,13 +69,13 @@ func (r *UserRepository) UpdateUserProfile(id int, req models.CreateUserRequest)
 		    address=$3,
 		    profile_img=$4,
 		    updated_at=$5
-		WHERE id=$6`,
+		WHERE email=$6`,
 		req.Fullname,
 		req.Phone,
 		req.Address,
 		req.Profile_img,
 		time.Now(),
-		id,
+		req.Email,
 	)
 
 	return err

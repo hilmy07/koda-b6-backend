@@ -12,8 +12,11 @@ func SetupRoutes(r *gin.Engine, db *pgx.Conn) {
 	c := container.NewContainer(db)
 
 	authHandler := c.AuthHandler()
+	productHandler := c.ProductHandler()
 
 	r.POST("/auth", authHandler.AuthLogin)
 	r.POST("/auth/new", authHandler.AuthRegister)
-	r.POST("/profile", authHandler.AuthProfile)
+	r.PATCH("/users/profile", authHandler.AuthProfile)
+	// r.PATCH("/users/uploads", authHandler.AuthProfile)
+	r.GET("/product", productHandler.GetProductList)
 }

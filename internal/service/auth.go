@@ -42,21 +42,9 @@ func (s *AuthService) Register(req models.CreateUserRequest) error {
 
 func (s *AuthService) ProfileRegister(req models.CreateUserRequest) error {
 
-	existingUser, _ := s.repo.GetByEmail(req.Email)
+	req.Updated_at = time.Now()
 
-	now := time.Now()
-	req.Updated_at = now
-
-	// kalau user belum ada → buat baru
-	// if existingUser == nil || err != nil {
-
-	// 	req.Created_at = now
-
-	// 	return s.repo.UpdateUserProfile(req)
-	// }
-
-	// kalau user sudah ada → update profile
-	return s.repo.UpdateUserProfile(existingUser.Id, req)
+	return s.repo.UpdateUserProfile(req)
 }
 
 func (s *AuthService) Login(email string, password string) (string, error) {

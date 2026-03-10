@@ -92,7 +92,7 @@ func (h *AuthHandler) AuthProfile(ctx *gin.Context) {
 
 	ctx.JSON(201, gin.H{
 		"success": true,
-		"message": "register success",
+		"message": "update profile success",
 	})
 }
 
