@@ -19,27 +19,18 @@ func NewUserRepository(db *pgx.Conn) *UserRepository {
 
 func (r *UserRepository) GetByEmail(email string) (*models.User, error) {
 
-	row := r.db.QueryRow(
+	rows, err := r.db.Query(
 		context.Background(),
 		`SELECT id,email,fullname,password,phone,address,profile_img,created_at,updated_at 
 		FROM users WHERE email=$1`,
 		email,
 	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
 
-	user := models.User{}
-
-	err := row.Scan(
-		&user.Id,
-		&user.Email,
-		&user.Fullname,
-		&user.Password,
-		&user.Phone,
-		&user.Address,
-		&user.Profile_img,
-		&user.Created_at,
-		&user.Updated_at,
-	)
-
+	user, err := pgx.CollectOneRow(rows, pgx.RowToStructByPos[models.User])
 	if err != nil {
 		return nil, err
 	}
@@ -54,16 +45,34 @@ func (r *UserRepository) CreateUser(req models.CreateUserRequest) error {
 	_, err := r.db.Exec(
 		context.Background(),
 		`INSERT INTO users 
-		(email, fullname, password, phone, address, profile_img, created_at, updated_at)
-		VALUES ($1,$2,$3,$4,$5,$6,$7,$8)`,
+		(email, password, created_at, updated_at)
+		VALUES ($1,$2,$3,$4)`,
 		req.Email,
-		req.Fullname,
 		req.Password,
+		now,
+		now,
+	)
+
+	return err
+}
+
+func (r *UserRepository) UpdateUserProfile(id int, req models.CreateUserRequest) error {
+
+	_, err := r.db.Exec(
+		context.Background(),
+		`UPDATE users 
+		SET fullname=$1,
+		    phone=$2,
+		    address=$3,
+		    profile_img=$4,
+		    updated_at=$5
+		WHERE id=$6`,
+		req.Fullname,
 		req.Phone,
 		req.Address,
 		req.Profile_img,
-		now,
-		now,
+		time.Now(),
+		id,
 	)
 
 	return err

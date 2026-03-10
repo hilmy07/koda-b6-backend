@@ -15,4 +15,5 @@ func SetupRoutes(r *gin.Engine, db *pgx.Conn) {
 
 	r.POST("/auth", authHandler.AuthLogin)
 	r.POST("/auth/new", authHandler.AuthRegister)
+	r.POST("/profile", authHandler.AuthProfile)
 }

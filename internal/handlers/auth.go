@@ -46,11 +46,6 @@ func (h *AuthHandler) AuthLogin(ctx *gin.Context) {
 
 func (h *AuthHandler) AuthRegister(ctx *gin.Context) {
 
-	// type Request struct {
-	// 	Email    string `json:"email"`
-	// 	Password string `json:"password"`
-	// }
-
 	req := models.CreateUserRequest{}
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
@@ -74,3 +69,31 @@ func (h *AuthHandler) AuthRegister(ctx *gin.Context) {
 		"message": "register success",
 	})
 }
+
+func (h *AuthHandler) AuthProfile(ctx *gin.Context) {
+
+	req := models.CreateUserRequest{}
+
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(400, gin.H{
+			"message": "invalid request",
+		})
+		return
+	}
+
+	err := h.service.ProfileRegister(req)
+
+	if err != nil {
+		ctx.JSON(400, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(201, gin.H{
+		"success": true,
+		"message": "register success",
+	})
+}
+
+
