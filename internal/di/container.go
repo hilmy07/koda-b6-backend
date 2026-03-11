@@ -20,6 +20,10 @@ type Container struct {
 	authService *service.AuthService
 	authHandler *handlers.AuthHandler
 
+	forgotRepo    *repository.ForgotPasswordRepository
+	forgotService *service.ForgotPasswordService
+	forgotHandler *handlers.ForgotPasswordHandler
+
 	productRepo    *repository.ProductRepository
 	productService *service.ProductService
 	productHandler *handlers.ProductHandler
@@ -48,6 +52,17 @@ func (c *Container) init() {
 	c.authHandler = handlers.NewAuthHandler(c.authService)
 
 
+	c.forgotRepo = repository.NewForgotPasswordRepository(c.db)
+
+	c.forgotService = service.NewForgotPasswordService(
+		c.userRepo,
+		c.forgotRepo,
+	)
+
+	c.forgotHandler = handlers.NewForgotPasswordHandler(
+		c.forgotService,
+	)
+
 	c.productRepo = repository.NewProductRepository(c.db)
 
 	c.productService = service.NewProductService(c.productRepo)
@@ -61,6 +76,10 @@ func (c *Container) AuthHandler() *handlers.AuthHandler {
 
 func (c *Container) ProductHandler() *handlers.ProductHandler {
 	return c.productHandler
+}
+
+func (c *Container) ForgotPasswordHandler() *handlers.ForgotPasswordHandler {
+	return c.forgotHandler
 }
 
 func Connect() (*pgx.Conn, error) {

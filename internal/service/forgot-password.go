@@ -73,6 +73,8 @@ func (s *ForgotPasswordService) RequestForgotPassword(req models.User) error {
 		Code:  code,
 	}
 
+	fmt.Println(forgot.Code)
+
 	// simpan ke database
 	err = s.forgotPasswordRepo.CreateForgotRequest(forgot)
 	if err != nil {

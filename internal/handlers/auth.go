@@ -17,6 +17,16 @@ func NewAuthHandler(service *service.AuthService) *AuthHandler {
 	return &AuthHandler{service: service}
 }
 
+type ForgotPasswordHandler struct {
+	service *service.ForgotPasswordService
+}
+
+func NewForgotPasswordHandler(service *service.ForgotPasswordService) *ForgotPasswordHandler {
+	return &ForgotPasswordHandler{
+		service: service,
+	}
+}
+
 func (h *AuthHandler) AuthLogin(ctx *gin.Context) {
 
 	type Request struct {
@@ -96,4 +106,64 @@ func (h *AuthHandler) AuthProfile(ctx *gin.Context) {
 	})
 }
 
+func (h *ForgotPasswordHandler) RequestForgotPassword(ctx *gin.Context) {
 
+	var req models.User
+
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "invalid request",
+		})
+		return
+	}
+
+	err := h.service.RequestForgotPassword(req)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"message": "OTP sent successfully",
+	})
+}
+
+func (h *ForgotPasswordHandler) ResetPassword(ctx *gin.Context) {
+
+	var req struct {
+		Email       string `json:"email"`
+		Code        string `json:"code"`
+		NewPassword string `json:"new_password"`
+	}
+
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "invalid request",
+		})
+		return
+	}
+
+	forgot := models.ForgotPassword{
+		Email: req.Email,
+		Code:  req.Code,
+	}
+
+	user := models.User{
+		Email:    req.Email,
+		Password: req.NewPassword,
+	}
+
+	err := h.service.ResetPassword(forgot, user)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"message": "password reset success",
+	})
+}

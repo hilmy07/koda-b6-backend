@@ -48,6 +48,72 @@ func (r *ProductRepository) GetProductList() ([]models.ProductList, error) {
 	return products, nil
 }
 
+func (r *ProductRepository) GetProductDetail(productID int) (*models.ProductDetail, error) {
+	var product models.ProductDetail
+	var images []string
+	var sizes []string
+	var variants []string
+
+	query := `
+	SELECT
+		p.id,
+		p.name_product,
+		p.base_price,
+		COALESCE(
+			ARRAY(
+				SELECT pi.path
+				FROM product_images pi
+				WHERE pi.product_id = p.id
+				LIMIT 4
+			),
+			'{}'
+		) AS images,
+		COALESCE(
+			(SELECT COUNT(*) FROM product_reviews pr WHERE pr.product_id = p.id),
+			0
+		) AS review_count,
+		COALESCE(
+			ARRAY(
+				SELECT ps.size_name
+				FROM product_sizes ps
+				WHERE ps.product_id = p.id
+				LIMIT 3
+			),
+			'{}'
+		) AS sizes,
+		COALESCE(
+			ARRAY(
+				SELECT pv.variant_name
+				FROM product_variants pv
+				WHERE pv.product_id = p.id
+				LIMIT 2
+			),
+			'{}'
+		) AS variants
+	FROM products p
+	WHERE p.id = $1
+	`
+
+	err := r.db.QueryRow(context.Background(), query, productID).Scan(
+		&product.ID,
+		&product.NameProduct,
+		&product.BasePrice,
+		&images,
+		&product.ReviewCount,
+		&sizes,
+		&variants,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	product.Images = images
+	product.Sizes = sizes
+	product.Variants = variants
+
+	return &product, nil
+}
+
 // func (r *ProductRepository) GetProduct() ([]models.Product, error) {
 // 	rows, err := r.db.Query(
 // 		context.Background(),

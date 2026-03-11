@@ -21,6 +21,16 @@ type ProductList struct {
 	Rating      float64 `json:"rating"`
 }
 
+type ProductDetail struct {
+	ID          int      `json:"id"`
+	NameProduct string   `json:"name_product"`
+	BasePrice   float64  `json:"base_price"`
+	Images      []string `json:"images"`
+	ReviewCount int      `json:"review_count"`
+	Sizes       []string `json:"sizes"`
+	Variants    []string `json:"variants"`
+}
+
 type ProductVariant struct {
 	Id        int  `json:"id"`
 	ProductID int `json:"product_id"`
