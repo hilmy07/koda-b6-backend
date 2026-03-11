@@ -15,7 +15,7 @@ func NewForgotPasswordRepository(db *pgx.Conn) *ForgotPasswordRepository {
 	return &ForgotPasswordRepository{db: db}
 }
 
-func (r *ForgotPasswordRepository) CreateForgotPassword(req models.ForgotPassword) error {
+func (r *ForgotPasswordRepository) CreateForgotRequest(req models.ForgotPassword) error {
 	_, err := r.db.Exec(
 		context.Background(),
 		`INSERT INTO forgot_password (email,code)

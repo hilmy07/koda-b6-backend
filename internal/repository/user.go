@@ -59,6 +59,21 @@ func (r *UserRepository) CreateUser(req models.CreateUserRequest) error {
 	return err
 }
 
+func (r *UserRepository) UpdatePasswordByEmail(email string, password string) error {
+
+	_, err := r.db.Exec(
+		context.Background(),
+		`UPDATE users
+		 SET password = $1,
+		     updated_at = NOW()
+		 WHERE email = $2`,
+		password,
+		email,
+	)
+
+	return err
+}
+
 func (r *UserRepository) UpdateUserProfile(req models.CreateUserRequest) error {
 
 	_, err := r.db.Exec(
