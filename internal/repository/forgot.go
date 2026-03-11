@@ -10,6 +10,10 @@ func NewForgotPasswordRepository(db *pgx.Conn) *ForgotPasswordRepository {
 	return &ForgotPasswordRepository{db: db}
 }
 
+func (r *ForgotPasswordRepository) CreateForgotPassword() {
+
+}
+
 func (r *ForgotPasswordRepository) GetDataByEmailnCode() {
 
 }
