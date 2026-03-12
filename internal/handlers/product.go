@@ -32,6 +32,23 @@ func (h *ProductHandler) GetProductList(ctx *gin.Context) {
 	})
 }
 
+func (h *ProductHandler) GetRecommendedProduct(ctx *gin.Context) {
+
+	products, err := h.service.GetRecommendedProduct()
+
+	if err != nil {
+		ctx.JSON(500, gin.H{
+			"message": "failed get products",
+		})
+		return
+	}
+
+	ctx.JSON(200, gin.H{
+		"success": true,
+		"data": products,
+	})
+}
+
 func (h *ProductHandler) GetProductDetail(ctx *gin.Context) {
 
 	idParam := ctx.Param("id")

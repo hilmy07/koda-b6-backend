@@ -48,6 +48,38 @@ func (r *ProductRepository) GetProductList() ([]models.ProductList, error) {
 	return products, nil
 }
 
+func (r *ProductRepository) GetRecommendedProduct() ([]models.ProductList, error) {
+
+	rows, err := r.db.Query(
+		context.Background(),
+		`SELECT
+		p.id,
+		p.name_product,
+		p.description,
+		p.base_price,
+		pi.path,
+		COALESCE(AVG(pr.rating),0) AS rating
+		FROM products p
+		LEFT JOIN product_images pi ON pi.product_id = p.id
+		LEFT JOIN product_reviews pr ON pr.product_id = p.id
+		GROUP BY p.id, pi.path
+		LIMIT 4`,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	products, err := pgx.CollectRows(rows, pgx.RowToStructByPos[models.ProductList])
+
+	if err != nil {
+		return nil, err
+	}
+
+	return products, nil
+}
+
 func (r *ProductRepository) GetProductDetail(productID int) (*models.ProductDetail, error) {
 	var product models.ProductDetail
 	var images []string

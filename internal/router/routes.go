@@ -24,6 +24,12 @@ func SetupRoutes(r *gin.Engine, db *pgx.Conn) {
 	r.PATCH("/users/profile", authHandler.AuthProfile)
 
 	// r.PATCH("/users/uploads", authHandler.AuthProfile)
+
+	// halaman home
+	r.GET("/recommended-products", productHandler.GetRecommendedProduct)
+	// r.GET("/reviews", productHandler.GetProductList)
+
+	// halaman product
 	r.GET("/product", productHandler.GetProductList)
 	r.GET("/product/:id", productHandler.GetProductDetail)
 }

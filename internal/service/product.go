@@ -28,3 +28,7 @@ func (s *ProductService) GetProductList() ([]models.ProductList, error) {
 func (s *ProductService) GetProductDetail(productID int) (*models.ProductDetail, error) {
 	return s.repo.GetProductDetail(productID)
 }
+
+func (s *ProductService) GetRecommendedProduct() ([]models.ProductList, error) {
+	return s.repo.GetRecommendedProduct()
+}
