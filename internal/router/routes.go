@@ -27,7 +27,7 @@ func SetupRoutes(r *gin.Engine, db *pgx.Conn) {
 
 	// halaman home
 	r.GET("/recommended-products", productHandler.GetRecommendedProduct)
-	// r.GET("/reviews", productHandler.GetProductList)
+	r.GET("/reviews", productHandler.GetProductReview)
 
 	// halaman product
 	r.GET("/product", productHandler.GetProductList)

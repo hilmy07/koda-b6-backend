@@ -80,6 +80,17 @@ func (r *ProductRepository) GetRecommendedProduct() ([]models.ProductList, error
 	return products, nil
 }
 
+func (r *ProductRepository) GetProductReview() ([]models.ProductReview, error) {
+	
+	rows, _ := r.db.Query(
+		context.Background(), `SELECT * FROM product_reviews`,
+	)
+
+	reviews, _ := pgx.CollectRows(rows, pgx.RowToStructByPos[models.ProductReview])
+
+	return reviews, nil
+}
+
 func (r *ProductRepository) GetProductDetail(productID int) (*models.ProductDetail, error) {
 	var product models.ProductDetail
 	var images []string
