@@ -199,6 +199,28 @@ func (r *ProductRepository) CreateProduct(req models.Product) error {
 	return err
 }
 
+func (r *ProductRepository) DeleteProduct(id int) error {
+	// now := time.Now()
+
+	// id, _ := strconv.Atoi(ctx.Param("id"))
+
+	// _, err := r.db.Exec(
+	// 	context.Background(),
+	// 	`DELETE FROM products 
+	// 	WHERE id=$1`,
+	// 	id,
+	// )
+
+	// return err
+	_, err := r.db.Exec(
+		context.Background(),
+		`DELETE FROM products WHERE id=$1`,
+		id,
+	)
+
+	return err
+}
+
 func (r *ProductRepository) GetProductVariant() ([]models.ProductVariant, error){
 	rows, err := r.db.Query(
 		context.Background(),

@@ -14,6 +14,11 @@ func NewProductService(repo *repository.ProductRepository) *ProductService {
 	return &ProductService{repo: repo}
 }
 
+func (s *ProductService) DeleteProduct(id int) error {
+
+	return s.repo.DeleteProduct(id)
+}
+
 func (s *ProductService) CreateProduct(req models.Product) error {
 
 	req.Created_at = time.Now()

@@ -30,6 +30,8 @@ func SetupRoutes(r *gin.Engine, db *pgx.Conn) {
 	r.GET("/reviews", productHandler.GetProductReview)
 
 	// halaman product
+	r.POST("/product/create", productHandler.CreateProduct)
+	r.DELETE("product/:id", productHandler.DeleteProduct)
 	r.GET("/product", productHandler.GetProductList)
 	r.GET("/product/:id", productHandler.GetProductDetail)
 }

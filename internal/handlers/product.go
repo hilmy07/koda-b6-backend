@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"backend/internal/models"
 	"backend/internal/service"
 	"strconv"
 
@@ -29,6 +30,49 @@ func (h *ProductHandler) GetProductList(ctx *gin.Context) {
 	ctx.JSON(200, gin.H{
 		"success": true,
 		"data": products,
+	})
+}
+
+func (h *ProductHandler) CreateProduct(ctx *gin.Context) {
+
+	req := models.Product{}
+
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(400, gin.H{
+			"message": "invalid request",
+		})
+		return
+	}
+
+	err := h.service.CreateProduct(req)
+
+	if err != nil {
+		ctx.JSON(400, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(201, gin.H{
+		"success": true,
+		"message": "product created",
+	})
+}
+
+func (h *ProductHandler) DeleteProduct(ctx *gin.Context) {
+	id, _ := strconv.Atoi(ctx.Param("id"))
+
+	err := h.service.DeleteProduct(id)
+
+	if err != nil {
+		ctx.JSON(500, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(200, gin.H{
+		"message": "product deleted",
 	})
 }
 

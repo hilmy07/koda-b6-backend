@@ -65,5 +65,5 @@ CREATE TABLE IF NOT EXISTS product_reviews (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
-
+SELECT * FROM products;
 
