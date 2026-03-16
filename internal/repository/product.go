@@ -63,6 +63,7 @@ func (r *ProductRepository) GetRecommendedProduct() ([]models.ProductList, error
 		LEFT JOIN product_images pi ON pi.product_id = p.id
 		LEFT JOIN product_reviews pr ON pr.product_id = p.id
 		GROUP BY p.id, pi.path
+		HAVING COALESCE(AVG(pr.rating),0) > 4
 		LIMIT 4`,
 	)
 
