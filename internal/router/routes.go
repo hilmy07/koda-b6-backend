@@ -2,10 +2,27 @@ package routes
 
 import (
 	container "backend/internal/di"
+	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5"
 )
+
+func corsMiddleware() gin.HandlerFunc {
+	// godotenv.Load()
+	return func(ctx *gin.Context) {
+		ctx.Header("Access-Control-Allow-Origin", os.Getenv("FRONTEND_URL"))
+		ctx.Header("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS")
+		ctx.Header("Access-Control-Allow-Headers", "content-type,authorization")
+		
+		if ctx.Request.Method == "OPTIONS" {
+			ctx.AbortWithStatus(http.StatusOK)
+		} else {
+			ctx.Next()
+		}
+	}
+}
 
 func SetupRoutes(r *gin.Engine, db *pgx.Conn) {
 
@@ -14,6 +31,8 @@ func SetupRoutes(r *gin.Engine, db *pgx.Conn) {
 	authHandler := c.AuthHandler()
 	productHandler := c.ProductHandler()
 	forgotHandler := c.ForgotPasswordHandler()
+
+	r.Use(corsMiddleware())
 
 	r.POST("/auth", authHandler.AuthLogin)
 	r.POST("/auth/new", authHandler.AuthRegister)
@@ -31,7 +50,7 @@ func SetupRoutes(r *gin.Engine, db *pgx.Conn) {
 
 	// halaman product
 	r.POST("/product/create", productHandler.CreateProduct)
-	r.DELETE("product/:id", productHandler.DeleteProduct)
+	r.DELETE("/product/:id", productHandler.DeleteProduct)
 	r.GET("/product", productHandler.GetProductList)
 	r.GET("/product/:id", productHandler.GetProductDetail)
 }
