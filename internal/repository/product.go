@@ -84,7 +84,7 @@ func (r *ProductRepository) GetRecommendedProduct() ([]models.ProductList, error
 func (r *ProductRepository) GetProductReview() ([]models.ProductReview, error) {
 	
 	rows, _ := r.db.Query(
-		context.Background(), `SELECT * FROM product_reviews`,
+		context.Background(), `SELECT u.fullname, message, rating FROM product_reviews pr JOIN users u ON pr.user_id = u.id`,
 	)
 
 	reviews, _ := pgx.CollectRows(rows, pgx.RowToStructByPos[models.ProductReview])
