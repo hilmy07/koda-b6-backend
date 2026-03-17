@@ -63,7 +63,7 @@ func (r *ProductRepository) GetRecommendedProduct() ([]models.ProductList, error
 		LEFT JOIN product_images pi ON pi.product_id = p.id
 		LEFT JOIN product_reviews pr ON pr.product_id = p.id
 		GROUP BY p.id, pi.path
-		HAVING COALESCE(AVG(pr.rating),0) > 4
+		
 		LIMIT 4`,
 	)
 
@@ -84,7 +84,7 @@ func (r *ProductRepository) GetRecommendedProduct() ([]models.ProductList, error
 func (r *ProductRepository) GetProductReview() ([]models.ProductReview, error) {
 	
 	rows, _ := r.db.Query(
-		context.Background(), `SELECT u.fullname, message, rating FROM product_reviews pr JOIN users u ON pr.user_id = u.id`,
+		context.Background(), `SELECT pr.id, u.fullname, message, rating FROM product_reviews pr JOIN users u ON pr.user_id = u.id`,
 	)
 
 	reviews, _ := pgx.CollectRows(rows, pgx.RowToStructByPos[models.ProductReview])

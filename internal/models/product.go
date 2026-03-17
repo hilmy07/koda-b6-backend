@@ -53,9 +53,8 @@ type ProductImage struct {
 
 type ProductReview struct {
 	Id        int `json:"id"`
-	ProductID int `json:"product_id"`
-	UserID    int `json:"user_id"`
+	Username    int `json:"user_id"`
 	Message   string `json:"message"`
 	Rating    int `json:"rating"`
-	CreatedAt time.Time 
+	// CreatedAt time.Time 
 }
