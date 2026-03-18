@@ -4,6 +4,7 @@ import (
 	"backend/internal/models"
 	"backend/internal/service"
 	"strconv"
+	"log"
 
 	"github.com/gin-gonic/gin"
 )
