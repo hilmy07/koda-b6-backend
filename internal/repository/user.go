@@ -48,8 +48,9 @@ func (r *UserRepository) CreateUser(req models.CreateUserRequest) error {
 	_, err := r.db.Exec(
 		context.Background(),
 		`INSERT INTO users 
-		(email, password, created_at, updated_at)
-		VALUES ($1,$2,$3,$4)`,
+		(fullname, email, password, created_at, updated_at)
+		VALUES ($1,$2,$3,$4,$5)`,
+		req.Fullname,
 		req.Email,
 		req.Password,
 		now,
