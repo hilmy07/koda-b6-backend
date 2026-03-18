@@ -85,6 +85,7 @@ func (h *ProductHandler) GetRecommendedProduct(ctx *gin.Context) {
 
 		ctx.JSON(500, gin.H{
 			"message": "failed get products",
+			"error":   err.Error(),
 		})
 		return
 	}
