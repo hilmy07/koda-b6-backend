@@ -52,18 +52,16 @@ func (r *ProductRepository) GetRecommendedProduct() ([]models.ProductList, error
 
 	rows, err := r.db.Query(
 		context.Background(),
-		`SELECT
-		p.id,
-		p.name_product,
-		p.description,
-		p.base_price,
-		COALESCE(pi.path, '') AS image,
-		COALESCE(AVG(pr.rating),0) AS rating
-		FROM products p
-		LEFT JOIN product_images pi ON pi.product_id = p.id
-		LEFT JOIN product_reviews pr ON pr.product_id = p.id
-		GROUP BY p.id, p.name_product, p.description, p.base_price, pi.path
-		ORDER BY rating DESC
+		`SELECT p.id, 
+		p.name_product, 
+		p.description, 
+		p.base_price, 
+		COALESCE(pi.path, '') AS image, 
+		COALESCE(AVG(pr.rating),0) AS rating 
+		FROM products p LEFT JOIN product_images pi ON pi.product_id = p.id 
+		LEFT JOIN product_reviews pr ON pr.product_id = p.id 
+		GROUP BY p.id, p.name_product, p.description, p.base_price, pi.path 
+		HAVING AVG(pr.rating) > 4 
 		LIMIT 4`,
 	)
 
