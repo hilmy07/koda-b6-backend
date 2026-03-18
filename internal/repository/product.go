@@ -5,11 +5,11 @@ import (
 	"context"
 	"time"
 
-	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/jackc/pgx/v5"
 )
 
 type ProductRepository struct {
-	db *pgxpool.Pool
+	db *pgx.Conn
 }
 
 func NewProductRepository(db *pgx.Conn) *ProductRepository {
