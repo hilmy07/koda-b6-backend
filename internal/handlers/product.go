@@ -82,9 +82,10 @@ func (h *ProductHandler) GetRecommendedProduct(ctx *gin.Context) {
 
 	if err != nil {
 		log.Println("ERROR GetRecommendedProduct:", err)
-		
+
 		ctx.JSON(500, gin.H{
 			"message": "failed get products",
+			"error":   err.Error(),
 		})
 		return
 	}
