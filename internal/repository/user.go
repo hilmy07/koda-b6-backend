@@ -21,8 +21,18 @@ func (r *UserRepository) GetByEmail(email string) (*models.User, error) {
 
 	rows, err := r.db.Query(
 		context.Background(),
-		`SELECT id,email,fullname,password,phone,address,profile_img,created_at,updated_at 
-		FROM users WHERE email=$1`,
+		`SELECT 
+		id,
+		email,
+		COALESCE(fullname, '') as fullname,
+		password,
+		COALESCE(phone, '') as phone,
+		COALESCE(address, '') as address,
+		COALESCE(profile_img, '') as profile_img,
+		created_at,
+		updated_at
+		FROM users 
+		WHERE email=$1`,
 		email,
 	)
 	if err != nil {
