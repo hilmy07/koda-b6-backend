@@ -49,7 +49,7 @@ func (s *AuthService) ProfileRegister(req models.CreateUserRequest) error {
 
 func (s *AuthService) Login(email string, password string) (string, error) {
 
-	user, err := s.repo.GetByEmail(email)
+	user, err := s.repo.Login(email, password)
 	if err != nil {
 		return "", err
 	}
@@ -66,3 +66,5 @@ func (s *AuthService) Login(email string, password string) (string, error) {
 
 	return token, nil
 }
+
+

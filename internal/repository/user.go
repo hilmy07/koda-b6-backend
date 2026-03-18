@@ -41,6 +41,31 @@ func (r *UserRepository) GetByEmail(email string) (*models.User, error) {
 	return &user, nil
 }
 
+func (r *UserRepository) Login(email string, password string) (*models.User, error) {
+
+	rows, err := r.db.Query(
+		context.Background(),
+		`SELECT email,password 
+		FROM users WHERE email=$1 && password=$2`,
+		email,
+		password,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	user, err := pgx.CollectOneRow(rows, pgx.RowToStructByPos[models.User])
+	if err != nil {
+		if err == pgx.ErrNoRows {
+			return nil, nil
+		}
+		return nil, err
+	}
+
+	return &user, nil
+}
+
 func (r *UserRepository) CreateUser(req models.CreateUserRequest) error {
 
 	now := time.Now()

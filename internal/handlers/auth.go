@@ -41,6 +41,7 @@ func (h *AuthHandler) AuthLogin(ctx *gin.Context) {
 	token, err := h.service.Login(req.Email, req.Password)
 
 	if err != nil {
+		
 		ctx.JSON(http.StatusUnauthorized, gin.H{
 			"message": "login failed",
 		})
