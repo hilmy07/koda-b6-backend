@@ -2,6 +2,7 @@ package service
 
 import (
 	"backend/internal/lib"
+	"backend/internal/models"
 	"backend/internal/repository"
 
 	"github.com/gin-gonic/gin"
@@ -29,5 +30,6 @@ func (s *UserService) UploadUserPicture(ctx *gin.Context) (string, bool) {
 	return "", false
 }
 
-
-
+func (s *UserService) GetUsers() ([]models.User, error) {
+	return s.repo.GetUser()
+}

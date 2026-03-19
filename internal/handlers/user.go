@@ -34,3 +34,20 @@ func (h *UserHandler) UploadPicture (ctx *gin.Context) {
 		})
 	}
 }
+
+func (h *UserHandler) GetUser(ctx *gin.Context) {
+
+	users, err := h.service.GetUsers()
+
+	if err != nil {
+		ctx.JSON(500, gin.H{
+			"message": "failed get products",
+		})
+		return
+	}
+
+	ctx.JSON(200, gin.H{
+		"success": true,
+		"data": users,
+	})
+}

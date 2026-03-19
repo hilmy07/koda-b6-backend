@@ -51,6 +51,16 @@ func (r *UserRepository) GetByEmail(email string) (*models.User, error) {
 	return &user, nil
 }
 
+func (r *UserRepository) GetUser() ([]models.User, error) {
+	rows, _ := r.db.Query(
+		context.Background(), `SELECT * FROM users`,
+	)
+
+	users, _ := pgx.CollectRows(rows, pgx.RowToStructByPos[models.User])
+
+	return users, nil
+}
+
 func (r *UserRepository) CreateUser(req models.CreateUserRequest) error {
 
 	now := time.Now()
