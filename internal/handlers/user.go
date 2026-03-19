@@ -41,7 +41,7 @@ func (h *UserHandler) GetUser(ctx *gin.Context) {
 
 	if err != nil {
 		ctx.JSON(500, gin.H{
-			"message": "failed get products",
+			"message": "failed get users",
 		})
 		return
 	}
