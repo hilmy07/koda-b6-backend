@@ -53,7 +53,15 @@ func (r *UserRepository) GetByEmail(email string) (*models.User, error) {
 
 func (r *UserRepository) GetUser() ([]models.User, error) {
 	rows, _ := r.db.Query(
-		context.Background(), `SELECT * FROM users`,
+		context.Background(), `SELECT id,
+		email,
+		COALESCE(fullname, '') as fullname,
+		password,
+		COALESCE(phone, '') as phone,
+		COALESCE(address, '') as address,
+		COALESCE(profile_img, '') as profile_img,
+		created_at,
+		updated_at FROM users`,
 	)
 
 	users, _ := pgx.CollectRows(rows, pgx.RowToStructByPos[models.User])
