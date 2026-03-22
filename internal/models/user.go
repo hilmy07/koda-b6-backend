@@ -14,6 +14,16 @@ type User struct {
 	Updated_at  time.Time
 }
 
+type ListUser struct {
+	Id          int    `json:"id"`
+	Email       string `json:"email"`
+	Fullname    string `json:"fullname"`
+	Phone       string `json:"phone"`
+	Address     string `json:"address"`
+	Profile_img string `json:"profile_img"`
+	Updated_at  time.Time
+}
+
 type CreateUserRequest struct {
 	Email       string `json:"email"`
 	Fullname    string `json:"fullname"`
