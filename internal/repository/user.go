@@ -51,7 +51,7 @@ func (r *UserRepository) GetByEmail(email string) (*models.User, error) {
 	return &user, nil
 }
 
-func (r *UserRepository) GetUser() ([]models.User, error) {
+func (r *UserRepository) GetUser() ([]models.ListUser, error) {
 	rows, _ := r.db.Query(
 		context.Background(), `SELECT id,
 		email,
@@ -62,7 +62,7 @@ func (r *UserRepository) GetUser() ([]models.User, error) {
 		updated_at FROM users`,
 	)
 
-	users, _ := pgx.CollectRows(rows, pgx.RowToStructByPos[models.User])
+	users, _ := pgx.CollectRows(rows, pgx.RowToStructByPos[models.ListUser])
 
 	return users, nil
 }

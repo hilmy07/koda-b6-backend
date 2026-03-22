@@ -30,6 +30,6 @@ func (s *UserService) UploadUserPicture(ctx *gin.Context) (string, bool) {
 	return "", false
 }
 
-func (s *UserService) GetUsers() ([]models.User, error) {
+func (s *UserService) GetUsers() ([]models.ListUser, error) {
 	return s.repo.GetUser()
 }
