@@ -56,11 +56,9 @@ func (r *UserRepository) GetUser() ([]models.User, error) {
 		context.Background(), `SELECT id,
 		email,
 		COALESCE(fullname, '') as fullname,
-		password,
 		COALESCE(phone, '') as phone,
 		COALESCE(address, '') as address,
 		COALESCE(profile_img, '') as profile_img,
-		created_at,
 		updated_at FROM users`,
 	)
 
