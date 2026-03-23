@@ -39,6 +39,7 @@ func SetupRoutes(r *gin.Engine, db *pgx.Conn) {
 	r.POST("/auth/new", authHandler.AuthRegister)
 	r.PATCH("/users/profile", authHandler.AuthProfile)
 	r.GET("/users", userHandler.GetUser)
+	r.DELETE("/users/:id", userHandler.DeleteUser)
 	
 	r.POST("/auth/forgot-password", forgotHandler.RequestForgotPassword)
 	r.PATCH("/reset-password", forgotHandler.ResetPassword)

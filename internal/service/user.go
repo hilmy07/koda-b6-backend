@@ -33,3 +33,8 @@ func (s *UserService) UploadUserPicture(ctx *gin.Context) (string, bool) {
 func (s *UserService) GetUsers() ([]models.ListUser, error) {
 	return s.repo.GetUser()
 }
+
+func (s *UserService) DeleteUser(id int) error {
+
+	return s.repo.DeleteUser(id)
+}

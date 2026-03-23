@@ -122,3 +122,13 @@ func (r *UserRepository) UpdateUserProfile(req models.CreateUserRequest) error {
 
 	return err
 }
+
+func (r *UserRepository) DeleteUser(id int) error {
+	_, err := r.db.Exec(
+		context.Background(),
+		`DELETE FROM users WHERE id=$1`,
+		id,
+	)
+
+	return err
+}

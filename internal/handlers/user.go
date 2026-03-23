@@ -3,6 +3,7 @@ package handlers
 import (
 	"backend/internal/service"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -49,5 +50,22 @@ func (h *UserHandler) GetUser(ctx *gin.Context) {
 	ctx.JSON(200, gin.H{
 		"success": true,
 		"data": users,
+	})
+}
+
+func (h *UserHandler) DeleteUser(ctx *gin.Context) {
+	id, _ := strconv.Atoi(ctx.Param("id"))
+
+	err := h.service.DeleteUser(id)
+
+	if err != nil {
+		ctx.JSON(500, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(200, gin.H{
+		"message": "user deleted",
 	})
 }
