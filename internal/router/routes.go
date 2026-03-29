@@ -50,7 +50,7 @@ func SetupRoutes(r *gin.Engine, db *pgx.Conn) {
 	// halaman home
 	r.GET("/recommended-products", productHandler.GetRecommendedProduct)
 	r.GET("/reviews", func (ctx *gin.Context) {
-		ctx.Header("Access-Control-Allow-Origin", "http://localhost:5173")
+		ctx.Header("Access-Control-Allow-Origin", os.Getenv("FRONTEND_URL"))
 		ctx.Header("Access-Control-Allow-Headers", "content-type")
 		ctx.Data(http.StatusOK, "", []byte(""))
 	}, productHandler.GetProductReview)
