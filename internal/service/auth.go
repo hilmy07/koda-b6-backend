@@ -47,22 +47,22 @@ func (s *AuthService) ProfileRegister(req models.CreateUserRequest) error {
 	return s.repo.UpdateUserProfile(req)
 }
 
-func (s *AuthService) Login(email string, password string) (string, error) {
+func (s *AuthService) Login(email string, password string) (*models.User, string, error) {
 
 	user, err := s.repo.GetByEmail(email)
 	if err != nil {
-		return "", err
+		return nil, "", err
 	}
 
 	ok, err := argon2.VerifyEncoded([]byte(password), []byte(user.Password))
 	if err != nil || !ok {
-		return "", errors.New("invalid email or password")
+		return nil, "", errors.New("invalid email or password")
 	}
 
 	token, err := lib.GenerateToken(user.Id)
 	if err != nil {
-		return "", err
+		return nil, "", err
 	}
 
-	return token, nil
+	return user, token, nil
 }

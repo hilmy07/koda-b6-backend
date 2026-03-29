@@ -65,6 +65,33 @@ CREATE TABLE IF NOT EXISTS product_reviews (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS transactions (
+    id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users_coffee(id) ON DELETE CASCADE,
+    transaction_code VARCHAR(100),
+    delivery_method VARCHAR(100),
+    fullname VARCHAR(100),
+    email VARCHAR(100),
+    address TEXT,
+    subtotal DECIMAL(12,2),
+    delivery_fee DECIMAL(12,2),
+    tax DECIMAL(12,2),
+    total DECIMAL(12,2),
+    status VARCHAR(50),
+    payment_method VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS transaction_items (
+    id SERIAL PRIMARY KEY,
+    transaction_id INT REFERENCES transactions(id) ON DELETE CASCADE,
+    product_id INT REFERENCES products(id) ON DELETE CASCADE,
+    variant_id INT REFERENCES variants(id),
+    size_id INT REFERENCES sizes(id),
+    quantity INT,
+    price DECIMAL(12,2)
+);
+
 SELECT * FROM sizes;
 SELECT * FROM variants;
 SELECT * FROM users;

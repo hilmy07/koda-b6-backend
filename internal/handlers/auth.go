@@ -38,7 +38,7 @@ func (h *AuthHandler) AuthLogin(ctx *gin.Context) {
 
 	ctx.ShouldBindJSON(&req)
 
-	token, err := h.service.Login(req.Email, req.Password)
+	user, token, err := h.service.Login(req.Email, req.Password)
 
 	if err != nil {
 		
@@ -51,7 +51,10 @@ func (h *AuthHandler) AuthLogin(ctx *gin.Context) {
 	ctx.JSON(200, gin.H{
 		"success": true,
 		"message": "Login success",
+		"email": req.Email,
 		"token": token,
+		"fullName": user.Fullname,
+		"profileImg": user.Profile_img,
 	})
 }
 
