@@ -31,7 +31,7 @@ func (r *ProductRepository) GetProductList() ([]models.ProductList, error) {
 		LEFT JOIN product_images pi ON pi.product_id = p.id
 		LEFT JOIN product_reviews pr ON pr.product_id = p.id
 		GROUP BY p.id, pi.path
-		LIMIT 6`,
+		LIMIT 50`,
 	)
 
 	if err != nil {
