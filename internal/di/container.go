@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type Container struct {
-	db *pgx.Conn
+	db *pgxpool.Pool
 
 	userRepo    *repository.UserRepository
 	userService *service.UserService
@@ -30,7 +30,7 @@ type Container struct {
 	productHandler *handlers.ProductHandler
 }
 
-func NewContainer(db *pgx.Conn) *Container {
+func NewContainer(db *pgxpool.Pool) *Container {
 
 	c := Container{
 		db: db,
@@ -89,7 +89,7 @@ func (c *Container) ForgotPasswordHandler() *handlers.ForgotPasswordHandler {
 	return c.forgotHandler
 }
 
-func Connect() (*pgx.Conn, error) {
+func Connect() (*pgxpool.Pool, error) {
 
 	dsn := fmt.Sprintf(
 		"postgres://%s:%s@%s:%s/postgres?sslmode=%s",
