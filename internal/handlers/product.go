@@ -19,19 +19,21 @@ func NewProductHandler(service *service.ProductService) *ProductHandler {
 
 func (h *ProductHandler) GetProductList(ctx *gin.Context) {
 
-	products, err := h.service.GetProductList()
+	pageQuery := ctx.Query("page")
+	page := 1
+	if pageQuery != "" {
+		if p, err := strconv.Atoi(pageQuery); err == nil && p > 0 {
+			page = p
+		}
+	}
 
+	paginatedProducts, err := h.service.GetProductList(page)
 	if err != nil {
-		ctx.JSON(500, gin.H{
-			"message": "failed get products",
-		})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 
-	ctx.JSON(200, gin.H{
-		"success": true,
-		"data": products,
-	})
+	ctx.JSON(http.StatusOK, paginatedProducts)
 }
 
 func (h *ProductHandler) CreateProduct(ctx *gin.Context) {

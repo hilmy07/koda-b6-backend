@@ -27,7 +27,7 @@ func (s *ProductService) CreateProduct(req models.Product) error {
 }
 
 func (s *ProductService) GetProductList() ([]models.ProductList, error) {
-	return s.repo.GetProductListPaginated()
+	return s.repo.GetProductListPaginated(page)
 }
 
 func (s *ProductService) GetProductDetail(productID int) (*models.ProductDetail, error) {
