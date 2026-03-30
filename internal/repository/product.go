@@ -25,7 +25,7 @@ func (r *ProductRepository) GetProductList() ([]models.ProductList, error) {
 		p.name_product,
 		p.description,
 		p.base_price,
-		pi.path,
+		COALESCE(pi.path, '') AS image,
 		COALESCE(AVG(pr.rating),0) AS rating
 		FROM products p
 		LEFT JOIN product_images pi ON pi.product_id = p.id
