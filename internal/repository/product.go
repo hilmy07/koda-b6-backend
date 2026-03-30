@@ -5,6 +5,7 @@ import (
 	"context"
 	"time"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -101,7 +102,7 @@ func (r *ProductRepository) GetProductReview() ([]models.ProductReview, error) {
 	)
 
 	defer rows.Close()
-	
+
 	reviews, _ := pgx.CollectRows(rows, pgx.RowToStructByPos[models.ProductReview])
 
 	return reviews, nil
