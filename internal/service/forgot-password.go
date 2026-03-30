@@ -111,6 +111,9 @@ func (s *ForgotPasswordService) ResetPassword(reqForgot models.ForgotPassword, r
 		return err
 	}
 
+	fmt.Printf("RESET PASSWORD RAW: %+v\n", reqUser.Password)
+	fmt.Println("RESET LEN:", len(reqUser.Password))
+
 	// hapus code setelah dipakai
 	err = s.forgotPasswordRepo.DeleteDataByCode(reqForgot.Code)
 	if err != nil {

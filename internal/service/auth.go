@@ -61,6 +61,9 @@ func (s *AuthService) Login(email string, password string) (*models.User, string
 	}
 	fmt.Println("MATCH:", ok, "ERR:", err)
 
+	fmt.Printf("LOGIN PASSWORD RAW: %+v\n", password)
+	fmt.Println("LOGIN LEN:", len(password))
+
 	token, err := lib.GenerateToken(user.Id)
 	if err != nil {
 		return nil, "", err
