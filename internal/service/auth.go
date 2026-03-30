@@ -5,7 +5,6 @@ import (
 	"backend/internal/models"
 	"backend/internal/repository"
 	"errors"
-	"fmt"
 	"time"
 
 	"github.com/matthewhartstonge/argon2"
@@ -59,10 +58,6 @@ func (s *AuthService) Login(email string, password string) (*models.User, string
 	if err != nil || !ok {
 		return nil, "", errors.New("invalid email or password")
 	}
-	fmt.Println("MATCH:", ok, "ERR:", err)
-
-	fmt.Printf("LOGIN PASSWORD RAW: %+v\n", password)
-	fmt.Println("LOGIN LEN:", len(password))
 
 	token, err := lib.GenerateToken(user.Id)
 	if err != nil {

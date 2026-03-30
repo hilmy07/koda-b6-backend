@@ -102,17 +102,11 @@ func (s *ForgotPasswordService) ResetPassword(reqForgot models.ForgotPassword, r
 		return err
 	}
 
-	fmt.Println("REQ FORGOT EMAIL:", reqForgot.Email)
-	fmt.Println("REQ USER EMAIL:", reqUser.Email)
-
 	// update password user
 	err = s.UserRepo.UpdatePasswordByEmail(reqUser.Email, hashedPassword)
 	if err != nil {
 		return err
 	}
-
-	fmt.Printf("RESET PASSWORD RAW: %+v\n", reqUser.Password)
-	fmt.Println("RESET LEN:", len(reqUser.Password))
 
 	// hapus code setelah dipakai
 	err = s.forgotPasswordRepo.DeleteDataByCode(reqForgot.Code)
