@@ -5,13 +5,14 @@ import (
 	"context"
 
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type ForgotPasswordRepository struct {
-	db *pgx.Conn
+	db *pgxpool.Pool
 }
 
-func NewForgotPasswordRepository(db *pgx.Conn) *ForgotPasswordRepository {
+func NewForgotPasswordRepository(db *pgxpool.Pool) *ForgotPasswordRepository {
 	return &ForgotPasswordRepository{db: db}
 }
 
