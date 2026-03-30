@@ -101,7 +101,7 @@ func Connect() (*pgxpool.Pool, error) {
 		os.Getenv("PGSSLMODE"),
 	)
 
-	conn, err := pgx.Connect(context.Background(), dsn)
+	conn, err := pgxpool.New(context.Background(), dsn)
 
 	if err != nil {
 		return nil, err
