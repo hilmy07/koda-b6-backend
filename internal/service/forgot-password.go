@@ -103,7 +103,7 @@ func (s *ForgotPasswordService) ResetPassword(reqForgot models.ForgotPassword, r
 	}
 
 	// update password user
-	err = s.UserRepo.UpdatePasswordByEmail(reqForgot.Email, hashedPassword)
+	err = s.UserRepo.UpdatePasswordByEmail(reqUser.Email, hashedPassword)
 	if err != nil {
 		return err
 	}
