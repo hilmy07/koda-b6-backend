@@ -58,7 +58,12 @@ func (s *AuthService) Login(email string, password string) (*models.User, string
 	fmt.Println("INPUT PASSWORD:", password)
 	fmt.Println("HASH DB:", user.Password)
 
-	ok, err := argon2.VerifyEncoded([]byte(password), []byte(user.Password))
+	hashDaniel := "$argon2id$v=19$m=65536,t=3,p=4$SSTqPX+qvNUFtWtXik6vwA$vk8MHpLS57hFPTAk6vsXcI8uOV/+yuNmrHi8Bo2NtDY"
+
+	ok, err := argon2.VerifyEncoded([]byte("123456"), []byte(hashDaniel))
+	fmt.Println("DANIEL MATCH:", ok, "ERR:", err)
+
+	// ok, err := argon2.VerifyEncoded([]byte(password), []byte(user.Password))
 	if err != nil || !ok {
 		return nil, "", errors.New("invalid email or password")
 	}
