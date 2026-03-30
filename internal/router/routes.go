@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 func corsMiddleware() gin.HandlerFunc {
@@ -24,7 +24,7 @@ func corsMiddleware() gin.HandlerFunc {
 	}
 }
 
-func SetupRoutes(r *gin.Engine, db *pgx.Conn) {
+func SetupRoutes(r *gin.Engine, db *pgxpool.Pool) {
 
 	c := container.NewContainer(db)
 
