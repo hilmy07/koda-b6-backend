@@ -16,36 +16,54 @@ func NewProductRepository(db *pgx.Conn) *ProductRepository {
 	return &ProductRepository{db: db}
 }
 
-func (r *ProductRepository) GetProductList() ([]models.ProductList, error) {
+func (r *ProductRepository) GetProductListPaginated(page int) (*models.PaginatedProducts, error) {
+	limit := 6
+	offset := (page - 1) * limit
 
+	// ambil total product dulu
+	var total int
+	err := r.db.QueryRow(context.Background(), `SELECT COUNT(*) FROM products`).Scan(&total)
+	if err != nil {
+		return nil, err
+	}
+
+	// ambil data product per page
 	rows, err := r.db.Query(
 		context.Background(),
 		`SELECT
-		p.id,
-		p.name_product,
-		p.description,
-		p.base_price,
-		COALESCE(pi.path, '') AS image,
-		COALESCE(AVG(pr.rating),0) AS rating
+			p.id,
+			p.name_product,
+			p.description,
+			p.base_price,
+			COALESCE(pi.path, '') AS image,
+			COALESCE(AVG(pr.rating),0) AS rating
 		FROM products p
 		LEFT JOIN product_images pi ON pi.product_id = p.id
 		LEFT JOIN product_reviews pr ON pr.product_id = p.id
 		GROUP BY p.id, pi.path
-		ORDER BY p.id ASC LIMIT 50`,
+		ORDER BY p.id ASC
+		LIMIT $1 OFFSET $2`,
+		limit,
+		offset,
 	)
-
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 
 	products, err := pgx.CollectRows(rows, pgx.RowToStructByPos[models.ProductList])
-
 	if err != nil {
 		return nil, err
 	}
 
-	return products, nil
+	pagination := &models.PaginatedProducts{
+		Page:     page,
+		Limit:    limit,
+		Total:    total,
+		Products: products,
+	}
+
+	return pagination, nil
 }
 
 func (r *ProductRepository) GetRecommendedProduct() ([]models.ProductList, error) {
