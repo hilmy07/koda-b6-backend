@@ -12,11 +12,20 @@ type Product struct {
 	Updated_at   time.Time
 }
 
+type ProductList struct {
+	Id          int     `json:"id"`
+	NameProduct string  `json:"name_product"`
+	Description string  `json:"description"`
+	BasePrice   float64 `json:"base_price"`
+	Image       string  `json:"image"`
+	Rating      float64 `json:"rating"`
+}
+
 type PaginatedProducts struct {
 	Page     int           `json:"page"`
 	Limit    int           `json:"limit"`
-	Total    int           `json:"total"`   
-	Products []ProductList `json:"products"` 
+	Total    int           `json:"total"`    // total product di DB
+	Products []ProductList `json:"products"` // daftar produk per page
 }
 
 type ProductDetail struct {
