@@ -5,14 +5,14 @@ import (
 	"context"
 	"time"
 
-	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type ProductRepository struct {
-	db *pgx.Conn
+	db *pgxpool.Pool
 }
 
-func NewProductRepository(db *pgx.Conn) *ProductRepository {
+func NewProductRepository(db *pgxpool.Pool) *ProductRepository {
 	return &ProductRepository{db: db}
 }
 
@@ -100,6 +100,8 @@ func (r *ProductRepository) GetProductReview() ([]models.ProductReview, error) {
 		context.Background(), `SELECT pr.id, u.fullname, message, rating FROM product_reviews pr JOIN users u ON pr.user_id = u.id`,
 	)
 
+	defer rows.Close()
+	
 	reviews, _ := pgx.CollectRows(rows, pgx.RowToStructByPos[models.ProductReview])
 
 	return reviews, nil
