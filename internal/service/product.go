@@ -26,7 +26,7 @@ func (s *ProductService) CreateProduct(req models.Product) error {
 	return s.repo.CreateProduct(req)
 }
 
-func (s *ProductService) GetProductList(page int) ([]models.ProductList, error) {
+func (s *ProductService) GetProductList(page int) (*models.PaginatedProducts, error) {
 	return s.repo.GetProductListPaginated(page)
 }
 
