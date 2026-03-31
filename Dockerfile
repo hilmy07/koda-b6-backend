@@ -13,7 +13,7 @@ FROM alpine:latest
 WORKDIR /app
 
 COPY --from=build /workspace/backend /app/backend
-COPY --from=build /workspace/.env /app/.env
+# COPY --from=build /workspace/.env /app/.env
 
 EXPOSE 8000
 
