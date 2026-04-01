@@ -3,7 +3,6 @@ package main
 import (
 	con "backend/internal/di"
 	routes "backend/internal/router"
-	"log"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -12,10 +11,10 @@ import (
 
 func main() {
 
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
+	godotenv.Load()
+	// if err != nil {
+	// 	log.Fatal("Error loading .env file")
+	// }
 
 	db, err := con.Connect()
 
