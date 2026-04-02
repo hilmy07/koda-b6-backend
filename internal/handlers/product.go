@@ -3,7 +3,6 @@ package handlers
 import (
 	"backend/internal/models"
 	"backend/internal/service"
-	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -132,7 +131,7 @@ func (h *ProductHandler) GetProductDetail(ctx *gin.Context) {
 
 	product, err := h.service.GetProductDetail(id)
 	if err != nil {
-		fmt.Println("ERROR:", err)
+		// fmt.Println("ERROR:", err)
 		ctx.JSON(500, gin.H{
 			"message": "failed get product detail",
 		})
