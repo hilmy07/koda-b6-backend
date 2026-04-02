@@ -144,8 +144,9 @@ func (r *ProductRepository) GetProductDetail(productID int) (*models.ProductDeta
 		) AS sizes,
 		COALESCE(
 			ARRAY(
-				SELECT pv.variant_name
+				SELECT v.variant_name
 				FROM product_variants pv
+				JOIN variants v ON pv.variant_id = v.id
 				WHERE pv.product_id = p.id
 				LIMIT 2
 			),
