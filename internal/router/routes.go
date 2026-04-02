@@ -60,6 +60,7 @@ func SetupRoutes(r *gin.Engine, db *pgxpool.Pool) {
 	r.DELETE("/product/:id", productHandler.DeleteProduct)
 	r.GET("/product", productHandler.GetProductList)
 	r.GET("/product/:id", productHandler.GetProductDetail)
+	
 }
 
 
