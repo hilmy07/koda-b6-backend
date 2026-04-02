@@ -134,8 +134,9 @@ func (r *ProductRepository) GetProductDetail(productID int) (*models.ProductDeta
 		) AS review_count,
 		COALESCE(
 			ARRAY(
-				SELECT ps.size_name
+				SELECT ps.product_id, s.sizes_name
 				FROM product_sizes ps
+				JOIN sizes s ON sizes_id = s.id
 				WHERE ps.product_id = p.id
 				LIMIT 3
 			),
