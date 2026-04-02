@@ -1,11 +1,11 @@
 package handlers
 
 import (
-	"net/http"
 	"backend/internal/models"
 	"backend/internal/service"
-	"strconv"
 	"log"
+	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -111,7 +111,7 @@ func (h *ProductHandler) GetProductReview(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(200, gin.H{
+	ctx.IndentedJSON(200, gin.H{
 		"success": true,
 		"data": reviews,
 	})
