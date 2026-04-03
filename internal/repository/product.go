@@ -128,6 +128,10 @@ func (r *ProductRepository) GetProductDetail(productID int) (*models.ProductDeta
 			),
 			'{}'
 		) AS images,
+		 COALESCE(
+			(SELECT pr.rating FROM product_reviews pr WHERE pr.product_id = p.id),
+			0
+		) AS rating,
 		COALESCE(
 			(SELECT COUNT(*) FROM product_reviews pr WHERE pr.product_id = p.id),
 			0
@@ -175,28 +179,6 @@ func (r *ProductRepository) GetProductDetail(productID int) (*models.ProductDeta
 
 	return &product, nil
 }
-
-// func (r *ProductRepository) GetProduct() ([]models.Product, error) {
-// 	rows, err := r.db.Query(
-// 		context.Background(),
-// 		`SELECT id,name_product,description,base_price,stock,created_at,updated_at 
-// 		FROM products LIMIT 6`,
-// 	)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	defer rows.Close()
-
-// 	product, err := pgx.CollectRows(rows, pgx.RowToStructByPos[models.Product])
-// 	if err != nil {
-// 		if err == pgx.ErrNoRows {
-// 			return nil, nil
-// 		}
-// 		return nil, err
-// 	}
-
-// 	return product, nil
-// }
 
 func (r *ProductRepository) CreateProduct(req models.Product) error {
 
