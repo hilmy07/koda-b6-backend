@@ -118,6 +118,7 @@ func (r *ProductRepository) GetProductDetail(productID int) (*models.ProductDeta
 	SELECT
 		p.id,
 		p.name_product,
+		p.description,
 		p.base_price,
 		COALESCE(
 			ARRAY(
@@ -163,6 +164,7 @@ func (r *ProductRepository) GetProductDetail(productID int) (*models.ProductDeta
 	err := r.db.QueryRow(context.Background(), query, productID).Scan(
 		&product.ID,
 		&product.NameProduct,
+		&product.Description,
 		&product.BasePrice,
 		&images,
 		&product.Rating,

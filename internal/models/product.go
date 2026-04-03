@@ -31,6 +31,7 @@ type PaginatedProducts struct {
 type ProductDetail struct {
 	ID          int      `json:"id"`
 	NameProduct string   `json:"name_product"`
+	Description  string  `json:"description"`
 	BasePrice   float64  `json:"base_price"`
 	Images      []string `json:"images"`
 	Rating      float64 `json:"rating"`
