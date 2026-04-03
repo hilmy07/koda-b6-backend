@@ -33,6 +33,7 @@ type ProductDetail struct {
 	NameProduct string   `json:"name_product"`
 	BasePrice   float64  `json:"base_price"`
 	Images      []string `json:"images"`
+	Rating      float64 `json:"rating"`
 	ReviewCount int      `json:"review_count"`
 	Sizes       []string `json:"sizes"`
 	Variants    []string `json:"variants"`

@@ -165,6 +165,7 @@ func (r *ProductRepository) GetProductDetail(productID int) (*models.ProductDeta
 		&product.NameProduct,
 		&product.BasePrice,
 		&images,
+		&product.Rating,
 		&product.ReviewCount,
 		&sizes,
 		&variants,
