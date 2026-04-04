@@ -38,6 +38,10 @@ func (s *ProductService) GetRecommendedProduct() ([]models.ProductList, error) {
 	return s.repo.GetRecommendedProduct()
 }
 
+func (s *ProductService) GetAllProduct() ([]models.ProductList, error) {
+	return s.repo.GetAllProduct()
+}
+
 func (s *ProductService) GetProductReview() ([]models.ProductReview, error) {
 	return s.repo.GetProductReview()
 }

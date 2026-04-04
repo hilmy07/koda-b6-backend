@@ -101,6 +101,26 @@ func (h *ProductHandler) GetRecommendedProduct(ctx *gin.Context) {
 	})
 }
 
+func (h *ProductHandler) GetAllProduct(ctx *gin.Context) {
+
+	products, err := h.service.GetAllProduct()
+
+	if err != nil {
+		log.Println("ERROR GetAllProduct:", err)
+
+		ctx.JSON(500, gin.H{
+			"message": "failed get all products",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(200, gin.H{
+		"success": true,
+		"data": products,
+	})
+}
+
 func (h *ProductHandler) GetProductReview(ctx *gin.Context) {
 
 	reviews, err := h.service.GetProductReview()

@@ -17,6 +17,34 @@ func NewProductRepository(db *pgxpool.Pool) *ProductRepository {
 	return &ProductRepository{db: db}
 }
 
+func (r *ProductRepository) GetAllProduct() ([]models.ProductList, error) {
+	rows, err := r.db.Query(
+		context.Background(),
+		`SELECT p.id, 
+		p.name_product, 
+		p.description, 
+		p.base_price, 
+		COALESCE(pi.path, '') AS image, 
+		COALESCE(AVG(pr.rating),0) AS rating 
+		FROM products p LEFT JOIN product_images pi ON pi.product_id = p.id 
+		LEFT JOIN product_reviews pr ON pr.product_id = p.id 
+		GROUP BY p.id, p.name_product, p.description, p.base_price, pi.path`,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	products, err := pgx.CollectRows(rows, pgx.RowToStructByPos[models.ProductList])
+
+	if err != nil {
+		return nil, err
+	}
+
+	return products, nil
+}
+
 func (r *ProductRepository) GetProductListPaginated(page int) (*models.PaginatedProducts, error) {
 	const limit = 6
 	offset := (page - 1) * limit
