@@ -28,7 +28,7 @@ func (r *ProductRepository) GetAllProduct() ([]models.ProductList, error) {
 		COALESCE(AVG(pr.rating),0) AS rating 
 		FROM products p LEFT JOIN product_images pi ON pi.product_id = p.id 
 		LEFT JOIN product_reviews pr ON pr.product_id = p.id 
-		GROUP BY p.id, p.name_product, p.description, p.base_price, pi.path`,
+		GROUP BY p.id, p.name_product, p.description, p.base_price, pi.path ORDER BY p.id ASC`,
 	)
 
 	if err != nil {
