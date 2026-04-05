@@ -28,6 +28,10 @@ type Container struct {
 	productRepo    *repository.ProductRepository
 	productService *service.ProductService
 	productHandler *handlers.ProductHandler
+
+	cartRepo *repository.CartRepository
+	cartService *service.CartService
+	cartHandler *handlers.CartHandler
 }
 
 func NewContainer(db *pgxpool.Pool) *Container {
@@ -67,10 +71,13 @@ func (c *Container) init() {
 	)
 
 	c.productRepo = repository.NewProductRepository(c.db)
-
 	c.productService = service.NewProductService(c.productRepo)
-
 	c.productHandler = handlers.NewProductHandler(c.productService)
+
+	c.cartRepo = repository.NewCartRepository(c.db)
+	c.cartService = service.NewCartService(c.cartRepo)
+	c.cartHandler = handlers.NewCartHandler(c.cartService)
+
 }
 
 func (c *Container) AuthHandler() *handlers.AuthHandler {
@@ -83,6 +90,10 @@ func (c *Container) UserHandler() *handlers.UserHandler {
 
 func (c *Container) ProductHandler() *handlers.ProductHandler {
 	return c.productHandler
+}
+
+func (c *Container) CartHandler() *handlers.CartHandler {
+	return c.cartHandler
 }
 
 func (c *Container) ForgotPasswordHandler() *handlers.ForgotPasswordHandler {
