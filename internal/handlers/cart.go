@@ -67,14 +67,21 @@ func (h *CartHandler) GetCartByUser(ctx *gin.Context) {
 
 	 var req models.GetCartRequest
 
-    // Bind JSON dari body
     if err := ctx.ShouldBindJSON(&req); err != nil {
         ctx.JSON(400, gin.H{"message": "invalid request"})
         return
     }
 
-    // Panggil repository
     data, err := h.service.GetCartByUserId(req.UserId)
+	if len(data) == 0 {
+        ctx.JSON(404, gin.H{
+            "data":    []models.Cart{},
+            "success": false,
+            "message": "cart is empty",
+        })
+        return
+    }
+
     if err != nil {
         ctx.JSON(500, gin.H{"message": "internal server error"})
         return
