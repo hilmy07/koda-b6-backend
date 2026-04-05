@@ -3,6 +3,7 @@ package handlers
 import (
 	"backend/internal/models"
 	"backend/internal/service"
+	"log"
 
 	"github.com/gin-gonic/gin"
 )
@@ -41,3 +42,25 @@ func (h *CartHandler) CreateCart(ctx *gin.Context) {
 		"message": "cart item created",
 	})
 }
+
+func (h *CartHandler) GetCartList(ctx *gin.Context) {
+
+	carts, err := h.service.GetCartList()
+
+	if err != nil {
+		log.Println("ERROR GetCartList:", err)
+
+		ctx.JSON(500, gin.H{
+			"message": "failed get carts",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(200, gin.H{
+		"success": true,
+		"data": carts,
+	})
+}
+
+

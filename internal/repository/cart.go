@@ -4,6 +4,7 @@ import (
 	"backend/internal/models"
 	"context"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -20,4 +21,22 @@ func (c *CartRepository) CreateCartItem(req models.Cart) error {
 	_, err := c.db.Query(context.Background(), `INSERT INTO carts (quantity, size, variant, user_id, product_id) VALUES ($1,$2,$3,$4,$5) ON CONFLICT (user_id, product_id, size, variant) DO UPDATE SET quantity = "carts".quantity + EXCLUDED.quantity`, req.Quantity, req.Size, req.Variant, req.UserId, req.ProductId)
 
 	return err
+}
+
+func (c *CartRepository) GetCartList() ([]models.Cart, error) {
+
+	rows, err := c.db.Query(context.Background(), `SELECT * FROM carts`)
+
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	carts, err := pgx.CollectRows(rows, pgx.RowToStructByPos[models.Cart])
+
+	if err != nil {
+		return nil, err
+	}
+
+	return carts, nil
 }

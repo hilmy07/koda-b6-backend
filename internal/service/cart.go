@@ -13,7 +13,14 @@ func NewCartService(repo *repository.CartRepository) *CartService {
 	return &CartService{repo: repo}
 }
 
-func (s *CartService) CreateCart(req models.Cart) error {
-	return s.repo.CreateCartItem(req)
+func (c *CartService) CreateCart(req models.Cart) error {
+	return c.repo.CreateCartItem(req)
 }
+
+func (c *CartService) GetCartList() ([]models.Cart, error) {
+	return c.repo.GetCartList()
+}
+
+
+
 
