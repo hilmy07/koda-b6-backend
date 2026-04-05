@@ -12,3 +12,7 @@ type Cart struct {
 	Created_at time.Time
 	Updated_at time.Time
 }
+
+type GetCartRequest struct {
+    UserId int `json:"user_id"`
+}

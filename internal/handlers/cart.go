@@ -63,4 +63,25 @@ func (h *CartHandler) GetCartList(ctx *gin.Context) {
 	})
 }
 
+func (h *CartHandler) GetCartByUser(ctx *gin.Context) {
 
+	 var req models.GetCartRequest
+
+    // Bind JSON dari body
+    if err := ctx.ShouldBindJSON(&req); err != nil {
+        ctx.JSON(400, gin.H{"message": "invalid request"})
+        return
+    }
+
+    // Panggil repository
+    data, err := h.service.GetCartByUserId(req.UserId)
+    if err != nil {
+        ctx.JSON(500, gin.H{"message": "internal server error"})
+        return
+    }
+
+    ctx.JSON(200, gin.H{
+        "data":    data,
+        "success": true,
+    })
+}

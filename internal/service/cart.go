@@ -21,6 +21,8 @@ func (c *CartService) GetCartList() ([]models.Cart, error) {
 	return c.repo.GetCartList()
 }
 
-
+func (c *CartService) GetCartByUserId(userId int) ([]models.Cart, error) {
+	return c.repo.GetCartByUserId(userId)
+}
 
 
