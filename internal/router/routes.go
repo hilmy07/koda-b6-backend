@@ -64,7 +64,7 @@ func SetupRoutes(r *gin.Engine, db *pgxpool.Pool) {
 	r.GET("/product/:id", productHandler.GetProductDetail)
 
 	// halaman checkout
-	r.POST("/cart/create", cartHandler.CreateCart)
+	r.POST("/cart/create-item", cartHandler.CreateCart)
 }
 
 
