@@ -161,6 +161,6 @@ func (h *ProductHandler) GetProductDetail(ctx *gin.Context) {
 
 	ctx.JSON(200, gin.H{
 		"success": true,
-		"data": product,
+		"data": []product,
 	})
 }
