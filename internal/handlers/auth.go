@@ -29,16 +29,11 @@ func NewForgotPasswordHandler(service *service.ForgotPasswordService) *ForgotPas
 
 func (h *AuthHandler) AuthLogin(ctx *gin.Context) {
 
-	type Request struct {
-		Email    string `json:"email"`
-		Password string `json:"password"`
-	}
-
-	req := Request{}
+	req := models.RequestLogin{}
 
 	ctx.ShouldBindJSON(&req)
 
-	user, token, err := h.service.Login(req.Email, req.Password)
+	user, token, err := h.service.Login( req.Email, req.Password)
 
 	if err != nil {
 		
@@ -53,6 +48,7 @@ func (h *AuthHandler) AuthLogin(ctx *gin.Context) {
 		"message": "Login success",
 		"email": req.Email,
 		"token": token,
+		"id": user.Id,
 		"fullName": user.Fullname,
 		"profileImg": user.Profile_img,
 	})

@@ -47,7 +47,7 @@ func (s *AuthService) ProfileRegister(req models.CreateUserRequest) error {
 	return s.repo.UpdateUserProfile(req)
 }
 
-func (s *AuthService) Login(email string, password string) (*models.User, string, error) {
+func (s *AuthService) Login( email string, password string) (*models.User, string, error) {
 
 	user, err := s.repo.GetByEmail(email)
 	if err != nil {
