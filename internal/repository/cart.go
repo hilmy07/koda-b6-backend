@@ -3,6 +3,7 @@ package repository
 import (
 	"backend/internal/models"
 	"context"
+	"time"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -18,7 +19,9 @@ func NewCartRepository(db *pgxpool.Pool) *CartRepository {
 
 func (c *CartRepository) CreateCartItem(req models.Cart) error {
 
-	_, err := c.db.Query(context.Background(), `INSERT INTO carts (quantity, size, variant, user_id, product_id) VALUES ($1,$2,$3,$4,$5) ON CONFLICT (user_id, product_id, size, variant) DO UPDATE SET quantity = "carts".quantity + EXCLUDED.quantity`, req.Quantity, req.Size, req.Variant, req.UserId, req.ProductId)
+	now := time.Now()
+
+	_, err := c.db.Query(context.Background(), `INSERT INTO carts (quantity, size, variant, user_id, product_id, created_at, updated_at) VALUES ($1,$2,$3,$4,$5, $6, $7) ON CONFLICT (user_id, product_id, size, variant) DO UPDATE SET quantity = "carts".quantity + EXCLUDED.quantity`, req.Quantity, req.Size, req.Variant, req.UserId, req.ProductId, now, now)
 
 	return err
 }
