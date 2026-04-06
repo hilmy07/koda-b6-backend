@@ -33,7 +33,7 @@ func (h *AuthHandler) AuthLogin(ctx *gin.Context) {
 
 	ctx.ShouldBindJSON(&req)
 
-	user, token, err := h.service.Login( req.Email, req.Password)
+	user, token, err := h.service.Login(req.Email, req.Password)
 
 	if err != nil {
 		

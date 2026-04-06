@@ -1,6 +1,7 @@
 package service
 
 import (
+	"backend/internal/lib"
 	"backend/internal/models"
 	"backend/internal/repository"
 	"crypto/rand"
@@ -73,7 +74,11 @@ func (s *ForgotPasswordService) RequestForgotPassword(req models.User) error {
 		Code:  code,
 	}
 
-	fmt.Println(forgot.Code)
+	// fmt.Println(forgot.Code)
+	err = lib.SendOTPEmail(req.Email, forgot.Code)
+	if err != nil {
+		return err
+	}
 
 	// simpan ke database
 	err = s.forgotPasswordRepo.CreateForgotRequest(forgot)
