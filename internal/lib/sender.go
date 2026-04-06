@@ -24,8 +24,8 @@ func SendOTPEmail(to string, otp string) error {
 	d := gomail.NewDialer(
 		"sandbox.smtp.mailtrap.io",
 		2525,
-		"SMTP_USER", // ganti dari Mailtrap
-		"SMTP_PASS", // ganti dari Mailtrap
+		"2c8b3df5875788", // ganti dari Mailtrap
+		"1a26ee3572183e", // ganti dari Mailtrap
 	)
 
 	return d.DialAndSend(m)
