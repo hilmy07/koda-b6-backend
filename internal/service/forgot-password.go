@@ -74,7 +74,7 @@ func (s *ForgotPasswordService) RequestForgotPassword(req models.User) error {
 		Code:  code,
 	}
 
-	// fmt.Println(forgot.Code)
+	fmt.Println(forgot.Code)
 	err = lib.SendOTPEmail(req.Email, forgot.Code)
 	if err != nil {
 		return err
