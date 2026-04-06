@@ -49,19 +49,21 @@ func (c *CartRepository) GetCartList() ([]models.Cart, error) {
 	return carts, nil
 }
 
-func (c *CartRepository) GetCartByUserId(userId int) ([]models.Cart, error) {
+func (c *CartRepository) GetCartByUserId(userId int) ([]models.CartByUserID, error) {
 
 	rows, err := c.db.Query(context.Background(), `
 		SELECT 
-			id,
-			quantity,
-			size,
-			variant,
-			user_id,
-			product_id,
-			created_at,
-			updated_at
-		FROM carts 
+			c.id,
+			c.quantity,
+			c.size,
+			c.variant,
+			c.user_id,
+			c.product_id,
+			p.name_product,
+			c.created_at,
+			c.updated_at
+		FROM carts c
+		JOIN products p ON c.product_id = p.id
 		WHERE user_id = $1
 	`, userId)
 
@@ -70,7 +72,7 @@ func (c *CartRepository) GetCartByUserId(userId int) ([]models.Cart, error) {
 	}
 	defer rows.Close()
 
-	carts, err := pgx.CollectRows(rows, pgx.RowToStructByName[models.Cart])
+	carts, err := pgx.CollectRows(rows, pgx.RowToStructByName[models.CartByUserID])
 	if err != nil {
 		return nil, err
 	}
