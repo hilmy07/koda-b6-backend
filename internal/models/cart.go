@@ -20,7 +20,7 @@ type CartByUserID struct {
 	Variant      string    `json:"variant" db:"variant"`
 	UserId       int       `json:"user_id" db:"user_id"`
 	ProductId  	 int       `json:"product_id" db:"product_id"`
-	Price        int       `json:"price"`
+	Price        int       `json:"price" db:"base_price"`
 	Created_at   time.Time
 	Updated_at   time.Time
 }
