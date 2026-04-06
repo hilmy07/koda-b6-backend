@@ -58,7 +58,7 @@ func (c *CartRepository) GetCartByUserId(userId int) ([]models.CartByUserID, err
 			c.size,
 			c.variant,
 			c.user_id,
-			c.product_id,
+			p.name_product,
 			p.base_price,
 			c.created_at,
 			c.updated_at
