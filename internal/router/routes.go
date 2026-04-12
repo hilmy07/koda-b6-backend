@@ -18,6 +18,7 @@ func SetupRoutes(r *gin.Engine, db *pgxpool.Pool) {
 	userHandler := c.UserHandler()
 	productHandler := c.ProductHandler()
 	cartHandler := c.CartHandler()
+	orderHadler := c.OrderHandler()
 	forgotHandler := c.ForgotPasswordHandler()
 	authMiddleware := middleware.AuthMiddleware()
 	corsMiddleware := middleware.CorsMiddleware()
@@ -56,6 +57,7 @@ func SetupRoutes(r *gin.Engine, db *pgxpool.Pool) {
 	r.GET("/cart", cartHandler.GetCartList)
 	r.GET("/cart-user", authMiddleware, cartHandler.GetCartByUser)
 	r.DELETE("/cart-item", authMiddleware, cartHandler.DeleteCartItem)
+	r.POST("/order", authMiddleware, orderHadler.CreateOrder)
 }
 
 
