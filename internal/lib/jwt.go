@@ -33,3 +33,29 @@ func GenerateToken(userId int) (string, error) {
 
 	return tokenString, nil
 }
+
+func VerifyToken(tokenString string) (*CustomClaims, error) {
+	secret := os.Getenv("APP_SECRET")
+
+	claims := &CustomClaims{}
+
+	token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
+
+		// validasi algorithm
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, jwt.ErrSignatureInvalid
+		}
+
+		return []byte(secret), nil
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if !token.Valid {
+		return nil, jwt.ErrSignatureInvalid
+	}
+
+	return claims, nil
+}

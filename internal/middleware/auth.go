@@ -12,7 +12,6 @@ import (
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 
-		// ambil secret dari .env
 		secret := os.Getenv("APP_SECRET")
 		if secret == "" {
 			c.JSON(http.StatusInternalServerError, gin.H{
@@ -32,9 +31,8 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		// format: Bearer token
-		tokenString := strings.Split(authHeader, " ")
-		if len(tokenString) != 2 || tokenString[0] != "Bearer" {
+		splitToken := strings.Split(authHeader, " ")
+		if len(splitToken) != 2 || splitToken[0] != "Bearer" {
 			c.JSON(http.StatusUnauthorized, gin.H{
 				"error": "Invalid token format",
 			})
@@ -42,7 +40,13 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		token, err := jwt.Parse(tokenString[1], func(token *jwt.Token) (interface{}, error) {
+		token, err := jwt.Parse(splitToken[1], func(token *jwt.Token) (interface{}, error) {
+
+			// 🔥 validasi algorithm (important)
+			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+				return nil, jwt.ErrSignatureInvalid
+			}
+
 			return []byte(secret), nil
 		})
 
@@ -54,10 +58,25 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		// ambil claims (optional)
-		if claims, ok := token.Claims.(jwt.MapClaims); ok {
-			c.Set("user_id", claims["user_id"])
+		claims, ok := token.Claims.(jwt.MapClaims)
+		if !ok {
+			c.JSON(http.StatusUnauthorized, gin.H{
+				"error": "invalid token claims",
+			})
+			c.Abort()
+			return
 		}
+
+		userID, exists := claims["user_id"]
+		if !exists || userID == nil {
+			c.JSON(http.StatusUnauthorized, gin.H{
+				"error": "invalid token payload",
+			})
+			c.Abort()
+			return
+		}
+
+		c.Set("user_id", userID)
 
 		c.Next()
 	}
