@@ -68,6 +68,7 @@ func SetupRoutes(r *gin.Engine, db *pgxpool.Pool) {
 	r.POST("/cart/create-item", cartHandler.CreateCart)
 	r.GET("/cart", cartHandler.GetCartList)
 	r.GET("/cart-user", middleware.AuthMiddleware(), cartHandler.GetCartByUser)
+	r.DELETE("/cart-item", middleware.AuthMiddleware(), cartHandler.ClearCart)
 }
 
 
