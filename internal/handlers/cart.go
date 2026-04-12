@@ -110,3 +110,36 @@ func (h *CartHandler) GetCartByUser(ctx *gin.Context) {
 		"success": true,
 	})
 }
+
+func (h *CartHandler) ClearCart(ctx *gin.Context) {
+	userId, ok := getUserID(ctx)
+	if !ok {
+		ctx.JSON(401, gin.H{
+			"message": "unauthorized",
+		})
+		return
+	}
+
+	var req struct {
+		CartID int `json:"cart_id"`
+	}
+
+	// ambil dari body
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(400, gin.H{"error": "invalid request"})
+		return
+	}
+
+	if req.CartID == 0 {
+		ctx.JSON(400, gin.H{"error": "cart_id is required"})
+		return
+	}
+
+	err := h.service.DeleteCartItem(req.CartID, userId)
+	if err != nil {
+		ctx.JSON(500, gin.H{"error": "failed to delete item"})
+		return
+	}
+
+	ctx.JSON(200, gin.H{"success": true, "message": "item deleted"})
+}

@@ -79,3 +79,12 @@ func (c *CartRepository) GetCartByUserId(userId int) ([]models.CartByUserID, err
 
 	return carts, nil
 }
+
+func (c *CartRepository) DeleteCartItem(cartId int, userId int) error {
+	_, err := c.db.Exec(context.Background(), `
+		DELETE FROM carts
+		WHERE id = $1 AND user_id = $2
+	`, cartId, userId)
+
+	return err
+}

@@ -25,4 +25,6 @@ func (c *CartService) GetCartByUserId(userId int) ([]models.CartByUserID, error)
 	return c.repo.GetCartByUserId(userId)
 }
 
-
+func (s *CartService) DeleteCartItem(cartId int, userId int) error {
+	return s.repo.DeleteCartItem(cartId, userId)
+}
