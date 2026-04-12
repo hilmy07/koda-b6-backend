@@ -65,30 +65,36 @@ func (h *CartHandler) GetCartList(ctx *gin.Context) {
 
 func (h *CartHandler) GetCartByUser(ctx *gin.Context) {
 
-	 var req models.GetCartRequest
+	userID, exists := ctx.Get("user_id")
+	if !exists {
+		ctx.JSON(401, gin.H{
+			"message": "unauthorized",
+		})
+		return
+	}
 
-    if err := ctx.ShouldBindJSON(&req); err != nil {
-        ctx.JSON(400, gin.H{"message": "invalid request"})
-        return
-    }
+	uid := int(userID.(float64))
 
-    data, err := h.service.GetCartByUserId(req.UserId)
+	data, err := h.service.GetCartByUserId(uid)
+
+	if err != nil {
+		ctx.JSON(500, gin.H{
+			"message": "internal server error",
+		})
+		return
+	}
+
 	if len(data) == 0 {
-        ctx.JSON(404, gin.H{
-            "data":    []models.Cart{},
-            "success": false,
-            "message": "cart is empty",
-        })
-        return
-    }
+		ctx.JSON(404, gin.H{
+			"data":    []models.Cart{},
+			"success": false,
+			"message": "cart is empty",
+		})
+		return
+	}
 
-    if err != nil {
-        ctx.JSON(500, gin.H{"message": "internal server error"})
-        return
-    }
-
-    ctx.JSON(200, gin.H{
-        "data":    data,
-        "success": true,
-    })
+	ctx.JSON(200, gin.H{
+		"data":    data,
+		"success": true,
+	})
 }

@@ -34,36 +34,36 @@ type ProductDetail struct {
 	Description  string  `json:"description"`
 	BasePrice   float64  `json:"base_price"`
 	Images      []string `json:"images"`
-	Rating      float64 `json:"rating"`
+	Rating      float64  `json:"rating"`
 	ReviewCount int      `json:"review_count"`
 	Sizes       []string `json:"sizes"`
 	Variants    []string `json:"variants"`
 }
 
 type ProductVariant struct {
-	Id        int  `json:"id"`
-	ProductID int `json:"product_id"`
+	Id        int      `json:"id"`
+	ProductID int      `json:"product_id"`
 	VariantName string `json:"variant_name"`
-	AddPrice  float64 `json:"add_price"`
+	AddPrice  float64  `json:"add_price"`
 }
 
 type ProductSize struct {
-	Id        int `json:"id"`
-	ProductID int `json:"product_id"`
-	SizeName  string `json:"size_name"`
+	Id        int     `json:"id"`
+	ProductID int 	  `json:"product_id"`
+	SizeName  string  `json:"size_name"`
 	AddPrice  float64 `json:"add_price"`
 }
 
 type ProductImage struct {
-	Id        int `json:"id"`
-	ProductID int `json:"product_id"`
+	Id        int     `json:"id"`
+	ProductID int     `json:"product_id"`
 	Path      string  `json:"path"`
 }
 
 type ProductReview struct {
-	Id        int `json:"id"`
+	Id        int    `json:"id"`
 	Fullname  string `json:"fullname"`
 	Message   string `json:"message"`
-	Rating    int `json:"rating"`
+	Rating    int    `json:"rating"`
 	// CreatedAt time.Time 
 }
