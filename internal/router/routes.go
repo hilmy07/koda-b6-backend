@@ -67,7 +67,7 @@ func SetupRoutes(r *gin.Engine, db *pgxpool.Pool) {
 	// halaman checkout
 	r.POST("/cart/create-item", cartHandler.CreateCart)
 	r.GET("/cart", cartHandler.GetCartList)
-	r.GET("/cart", middleware.AuthMiddleware(), cartHandler.GetCartByUser)
+	r.GET("/cart-user", middleware.AuthMiddleware(), cartHandler.GetCartByUser)
 }
 
 
