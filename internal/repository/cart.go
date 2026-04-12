@@ -64,7 +64,7 @@ func (c *CartRepository) GetCartByUserId(userId int) ([]models.CartByUserID, err
 			c.updated_at
 		FROM carts c
 		JOIN products p ON c.product_id = p.id
-		WHERE user_id = $1
+		WHERE c.user_id = $1
 	`, userId)
 
 	if err != nil {
