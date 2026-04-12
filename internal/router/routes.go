@@ -10,21 +10,6 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func corsMiddleware() gin.HandlerFunc {
-	// godotenv.Load()
-	return func(ctx *gin.Context) {
-		ctx.Header("Access-Control-Allow-Origin", os.Getenv("FRONTEND_URL"))
-		ctx.Header("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS")
-		ctx.Header("Access-Control-Allow-Headers", "content-type,authorization")
-		
-		if ctx.Request.Method == "OPTIONS" {
-			ctx.AbortWithStatus(http.StatusOK)
-		} else {
-			ctx.Next()
-		}
-	}
-}
-
 func SetupRoutes(r *gin.Engine, db *pgxpool.Pool) {
 
 	c := container.NewContainer(db)
@@ -34,8 +19,10 @@ func SetupRoutes(r *gin.Engine, db *pgxpool.Pool) {
 	productHandler := c.ProductHandler()
 	cartHandler := c.CartHandler()
 	forgotHandler := c.ForgotPasswordHandler()
+	authMiddleware := middleware.AuthMiddleware()
+	corsMiddleware := middleware.CorsMiddleware()
 
-	r.Use(corsMiddleware())
+	r.Use(corsMiddleware)
 
 	r.POST("/auth", authHandler.AuthLogin)
 	r.POST("/auth/new", authHandler.AuthRegister)
@@ -67,8 +54,8 @@ func SetupRoutes(r *gin.Engine, db *pgxpool.Pool) {
 	// halaman checkout
 	r.POST("/cart/create-item", cartHandler.CreateCart)
 	r.GET("/cart", cartHandler.GetCartList)
-	r.GET("/cart-user", middleware.AuthMiddleware(), cartHandler.GetCartByUser)
-	r.DELETE("/cart-item", middleware.AuthMiddleware(), cartHandler.DeleteCartItem)
+	r.GET("/cart-user", authMiddleware, cartHandler.GetCartByUser)
+	r.DELETE("/cart-item", authMiddleware, cartHandler.DeleteCartItem)
 }
 
 
