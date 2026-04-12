@@ -111,7 +111,7 @@ func (h *CartHandler) GetCartByUser(ctx *gin.Context) {
 	})
 }
 
-func (h *CartHandler) ClearCart(ctx *gin.Context) {
+func (h *CartHandler) DeleteCartItem(ctx *gin.Context) {
 	userId, ok := getUserID(ctx)
 	if !ok {
 		ctx.JSON(401, gin.H{
