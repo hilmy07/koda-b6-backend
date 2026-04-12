@@ -69,7 +69,7 @@ func getUserID(ctx *gin.Context) (int, bool) {
 		return 0, false
 	}
 
-	uidFloat, ok := userID.(float64)
+	uidFloat, ok := userID.(int)
 	if !ok {
 		return 0, false
 	}

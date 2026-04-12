@@ -43,8 +43,6 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		// 🔥 langsung ambil Id (bukan user_id lagi)
 		c.Set("user_id", claims.Id)
-		println("TOKEN:", splitToken[1])
-		println("USER ID FROM TOKEN:", claims.Id)
 
 		c.Next()
 	}
