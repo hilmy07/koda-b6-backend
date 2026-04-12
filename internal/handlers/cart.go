@@ -63,17 +63,29 @@ func (h *CartHandler) GetCartList(ctx *gin.Context) {
 	})
 }
 
+func getUserID(ctx *gin.Context) (int, bool) {
+	userID, exists := ctx.Get("user_id")
+	if !exists || userID == nil {
+		return 0, false
+	}
+
+	uidFloat, ok := userID.(float64)
+	if !ok {
+		return 0, false
+	}
+
+	return int(uidFloat), true
+}
+
 func (h *CartHandler) GetCartByUser(ctx *gin.Context) {
 
-	userID, exists := ctx.Get("user_id")
-	if !exists {
+	uid, ok := getUserID(ctx)
+	if !ok {
 		ctx.JSON(401, gin.H{
 			"message": "unauthorized",
 		})
 		return
 	}
-
-	uid := int(userID.(float64))
 
 	data, err := h.service.GetCartByUserId(uid)
 
